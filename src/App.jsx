@@ -21,29 +21,42 @@ export default function App() {
     );
   }
 
+  let gameIsOver = false;
+
+  function setGameOver() {
+    console.log('you lost');
+  }
+
   // Game Logic - Scores
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
 
-  function checkIfBestScore() {
+  function incrementScore() {
     // incrementScore
     const nextScore = score + 1;
     setScore(nextScore);
+    checkIfBestScore(nextScore);
+    console.log('ieist');
+  }
 
+  function checkIfBestScore(nextScore) {
     nextScore > bestScore ? setBestScore(nextScore) : null;
-
-    console.log(nextScore);
   }
 
   return (
     <div>
-      <button onClick={() => checkIfBestScore(1)}>EE</button>
+      <button onClick={() => incrementScore()}>EE</button>
       {bestScore}
 
       <button onClick={() => clickCard(214)}>Cards!!!</button>
       {console.log(cards)}
       <pre>{JSON.stringify(cards)}</pre>
-      <Pokemons />
+      <Pokemons
+        score={score}
+        setScore={setScore}
+        bestScore={bestScore}
+        setBestScore={setBestScore}
+      />
     </div>
   );
 }

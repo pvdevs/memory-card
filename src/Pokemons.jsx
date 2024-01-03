@@ -1,45 +1,85 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
+import './pokemons.scss';
 
-export default function Pokemons() {
-  const basePokemons = ['pikachu', 'ditto', 'snorlax'];
+const basePokemons = ['pikachu', 'ditto', 'snorlax', 'eevee', 'mewtwo'];
+
+export default function Pokemons({ score, setScore, bestScore, setBestScore }) {
   const [pokemons, setPokemons] = useState([]);
 
-  function usePokemonsAPI(pokemonName) {
-    useEffect(() => {
-      async function loadPokemon() {
-        const pokemonsData = await Promise.all(
-          basePokemons.map(async (pokemonName) => {
-            const response = await fetch(
-              `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
-            );
-            const pokemon = await response.json();
-            return {
-              name: pokemon.name,
-              id: pokemon.id,
-              sprite: pokemon.sprites.front_default,
-              isClicked: false,
-            };
-          })
-        );
-        setPokemons(pokemonsData);
-      }
-      loadPokemon();
-      console.log(pokemons);
-      return;
-    }, [pokemonName]);
+  useEffect(() => {
+    async function loadPokemon() {
+      const pokemonsData = await Promise.all(
+        basePokemons.map(async (pokemonName) => {
+          const response = await fetch(
+            `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
+          );
+          const pokemon = await response.json();
+          return {
+            name: pokemon.name,
+            id: pokemon.id,
+            sprite: pokemon.sprites.front_default,
+            isClicked: false,
+          };
+        })
+      );
+      setPokemons(pokemonsData);
+    }
+    loadPokemon();
+    return;
+  }, []);
+
+  function incrementScore() {
+    // incrementScore
+    const nextScore = score + 1;
+    setScore(nextScore);
+    checkIfBestScore(nextScore);
+    console.log('ieist');
   }
 
-  usePokemonsAPI('pikachu');
-  usePokemonsAPI('ditto');
-  usePokemonsAPI('snorlax');
+  function checkIfBestScore(nextScore) {
+    nextScore > bestScore ? setBestScore(nextScore) : null;
+  }
 
+  function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+  }
+
+  function sortPokemons() {
+    const nextPokemons = [...pokemons];
+    shuffle(nextPokemons);
+    setPokemons(nextPokemons);
+  }
+
+  function clickPokemon(id) {
+    setPokemons(
+      pokemons.map((pokemon) => {
+        if (pokemon.isClicked === true) {
+          //setGameOver;
+          console.log('gameIsOver');
+          return;
+        }
+        if (pokemon.id === id) {
+          incrementScore();
+          return { ...pokemon, isClicked: true };
+        } else {
+          return pokemon;
+        }
+      })
+    );
+    sortPokemons();
+  }
+
+  //onClick={() => clickPokemon(pokemon.id)}
   const pokemonsList = pokemons.map((pokemon) => {
     return (
-      <div key={pokemon.id}>
-        <h1>{pokemon.name}</h1>
-        <h1>{pokemon.id}</h1>
+      <div
+        className="pokemon"
+        key={pokemon.id}
+        onClick={() => clickPokemon(pokemon.id)}
+      >
         <img src={pokemon.sprite} alt="" />
+        <h1>{pokemon.name}</h1>
       </div>
     );
   });
@@ -47,5 +87,5 @@ export default function Pokemons() {
   if (pokemons.length === 0) {
     return <div>loading...</div>;
   }
-  return <>{pokemonsList}</>;
+  return <div className="pokemons">{pokemonsList}</div>;
 }
