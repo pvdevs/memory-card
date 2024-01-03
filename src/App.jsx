@@ -1,31 +1,13 @@
-import { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
+import { useEffect, useState } from 'react';
+import Pokemon from './Pokemon';
 
 export default function App() {
   // Game Logic - Cards
-  const defaultCards = [
-    {
-      nome: 'paulo',
-      isClicked: false,
-      id: 214,
-    },
-    {
-      nome: 'viviane',
-      isClicked: false,
-      id: 455,
-    },
-    {
-      nome: 'brian',
-      isClicked: false,
-      id: 995,
-    },
-    {
-      nome: 'bea',
-      isClicked: false,
-      id: 222,
-    },
-  ];
 
-  const [cards, setCards] = useState(defaultCards);
+  //https://pokeapi.co/api/v2/
+
+  const [cards, setCards] = useState();
 
   function clickCard(id) {
     setCards(
@@ -60,6 +42,8 @@ export default function App() {
 
       <button onClick={() => clickCard(214)}>Cards!!!</button>
       {console.log(cards)}
+      <pre>{JSON.stringify(cards)}</pre>
+      <Pokemon pokemonName={'ditto'} />
     </div>
   );
 }
