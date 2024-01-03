@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { useEffect, useState } from 'react';
-import Pokemon from './Pokemon';
+import Pokemons from './Pokemons';
 
 export default function App() {
   // Game Logic - Cards
@@ -43,7 +43,7 @@ export default function App() {
       <button onClick={() => clickCard(214)}>Cards!!!</button>
       {console.log(cards)}
       <pre>{JSON.stringify(cards)}</pre>
-      <Pokemon pokemonName={'ditto'} />
+      <Pokemons />
     </div>
   );
 }
